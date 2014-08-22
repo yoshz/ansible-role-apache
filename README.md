@@ -45,7 +45,7 @@ There are a lot of config settings you can overwrite, but you'll have to refer t
 
 ## Licence
 
-BSD
+MIT
 
 ## Feedback? Found a bug? Requests?
 
