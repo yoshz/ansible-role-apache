@@ -1,0 +1,14 @@
+# This is the main task, which simply includes all necessary sub tasks.
+---
+- include: install.yml
+  tags: [apache, apache-install]
+
+- include: configure.yml
+  tags: [apache, apache-configure]
+
+- include: modules.yml
+  tags: [apache, apache-modules]
+
+- include: virtualhosts.yml
+  tags: [apache, apache-virtualhosts]
+

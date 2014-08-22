@@ -1,0 +1,3 @@
+# Restart the webserver daemon.
+- name: restart apache
+  service: "name=apache2 state=restarted"

@@ -1,0 +1,22 @@
+---
+- name: Set apache run user in envvars
+  lineinfile: >
+    line="export APACHE_RUN_USER={{ apache_run_user }}"
+    state=present
+    dest=/etc/apache2/envvars
+  notify: restart apache
+
+- name: Set apache run group in envvars
+  lineinfile: >
+    line="export APACHE_RUN_GROUP={{ apache_run_group }}"
+    state=present
+    dest=/etc/apache2/envvars
+  notify: restart apache
+
+- name: Set port in ports.conf
+  lineinfile: >
+    line="Listen {{ apache_listen_port }}"
+    regexp="^Listen "
+    state=present
+    dest=/etc/apache2/ports.conf
+  notify: restart apache

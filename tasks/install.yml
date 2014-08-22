@@ -1,0 +1,9 @@
+- name: Install Apache
+  apt: pkg=apache2 state=present
+  sudo: yes
+  with_items:
+    - apache2
+    - apache2-utils
+    - apache2.2-bin
+    - apache2-common
+
