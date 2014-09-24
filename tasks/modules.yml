@@ -2,6 +2,7 @@
 - name: Enable apache modules
   shell: >
     a2enmod {{ item }}
-    creates=/etc/apache2/mods-enabled/rewrite.load
+    creates=/etc/apache2/mods-enabled/{{ item }}.load
   with_items: apache_modules
   when: apache_modules|length > 0
+  notify: restart apache

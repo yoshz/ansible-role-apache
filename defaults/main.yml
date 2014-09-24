@@ -7,3 +7,5 @@ apache_run_group: 'www-data'
 apache_virtualhosts: []
 
 apache_modules: []
+
+apache_directories: []

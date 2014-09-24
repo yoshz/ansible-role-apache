@@ -1,0 +1,9 @@
+<Directory {{ item.directory }}>
+   {% if item.options is defined %}
+   Options {{ item.options }}
+   {% endif -%}
+   {% if item.allow_override is defined %}
+   AllowOverride {{ item.allow_override }}
+   {%- endif -%}
+   Require all granted
+</Directory>

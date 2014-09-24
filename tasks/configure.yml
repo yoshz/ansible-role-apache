@@ -20,3 +20,17 @@
     state=present
     dest=/etc/apache2/ports.conf
   notify: restart apache
+
+- name: Configure directory permissions
+  template:
+    src: directory.conf.j2
+    dest: /etc/apache2/conf-available/{{ item.name }}.conf
+    group: root
+    owner: root
+    mode: 0640
+  with_items: apache_directories
+
+- name: Enable directory permissions
+  shell: a2enconf -q {{ item.name }} creates=/etc/apache2/conf-enabled/{{ item.name }}.conf
+  with_items: apache_directories
+  notify: restart apache
