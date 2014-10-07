@@ -2,6 +2,7 @@
 - name: Set apache run user in envvars
   lineinfile: >
     line="export APACHE_RUN_USER={{ apache_run_user }}"
+    regexp="^export APACHE_RUN_USER="
     state=present
     dest=/etc/apache2/envvars
   notify: restart apache
@@ -9,6 +10,7 @@
 - name: Set apache run group in envvars
   lineinfile: >
     line="export APACHE_RUN_GROUP={{ apache_run_group }}"
+    regexp="^export APACHE_RUN_GROUP="
     state=present
     dest=/etc/apache2/envvars
   notify: restart apache
@@ -22,12 +24,8 @@
   notify: restart apache
 
 - name: Configure directory permissions
-  template:
-    src: directory.conf.j2
-    dest: /etc/apache2/conf-available/{{ item.name }}.conf
-    group: root
-    owner: root
-    mode: 0640
+  template: src=directory.conf.j2 dest=/etc/apache2/conf-available/{{ item.name }}.conf
+            group=root owner=root mode=0640
   with_items: apache_directories
 
 - name: Enable directory permissions
