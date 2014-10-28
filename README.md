@@ -18,7 +18,11 @@ which contains something like the following:
 
     # A list of virtualhosts to create.
     apache_virtualhosts:
-     - { hostname: 'myhostname.example.org', docroot: '/var/www' }
+     - hostname: 'myhostname.example.org'
+       alias: 'alias.example.org'
+       docroot: '/var/www'
+     - hostname: 'virtual_docroot'
+       virtual_docroot: '/var/www/sites/%0/public
 
     # The port Apache should listen on.
     apache_listen_port: 80
