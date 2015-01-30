@@ -11,3 +11,6 @@
 
 - include: virtualhosts.yml
   tags: [apache, apache-virtualhosts]
+
+- include: directories.yml
+  tags: [apache, apache-directories]

@@ -1,15 +1,15 @@
 <VirtualHost *:{{ apache_listen_port }}>
-	ServerName {{ item.hostname }}
-	{% if item.alias is defined %}ServerAlias {{ item.alias }}{% endif %}
+	ServerName {{ apache_virtualhosts[item].hostname }}
+	{% if apache_virtualhosts[item].alias is defined %}ServerAlias {{ apache_virtualhosts[item].alias }}{% endif %}
 
-	ServerAdmin {{ item.admin|default('webmaster@localhost') }}
-	{% if item.virtual_docroot is defined %}VirtualDocumentRoot {{ item.virtual_docroot }}
-	{% elif item.docroot is defined %}DocumentRoot {{ item.docroot }}{% endif %}
+	ServerAdmin {{ apache_virtualhosts[item].admin|default('webmaster@localhost') }}
+	{% if apache_virtualhosts[item].virtual_docroot is defined %}VirtualDocumentRoot {{ apache_virtualhosts[item].virtual_docroot }}
+	{% elif apache_virtualhosts[item].docroot is defined %}DocumentRoot {{ apache_virtualhosts[item].docroot }}{% endif %}
 
 	ErrorLog ${APACHE_LOG_DIR}/error.log
 	CustomLog ${APACHE_LOG_DIR}/access.log combined
 
-	{% if item.docroot is defined %}<Directory {{ item.docroot }}>
+	{% if apache_virtualhosts[item].docroot is defined %}<Directory {{ apache_virtualhosts[item].docroot }}>
 	    Require all granted
 	</Directory>{% endif %}
 

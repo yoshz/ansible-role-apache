@@ -1,0 +1,17 @@
+---
+- name: Configure directory permissions
+  template: src=directory.conf.j2 dest=/etc/apache2/conf-enabled/dir-{{ item }}.conf
+            group=root owner=root mode=0640
+  with_items: apache_directories.keys()
+  notify: restart apache
+
+- name: Find enabled directories
+  shell: ls -1 /etc/apache2/conf-enabled/
+  register: dirs_enabled
+  changed_when: False
+
+- name: Disable unmanaged directories
+  file: name=/etc/apache2/conf-enabled/{{ item }} state=absent
+  with_items: dirs_enabled.stdout_lines
+  when: item[0:4] == 'dir-' and item[4:-5] not in apache_directories.keys()
+  notify: restart apache

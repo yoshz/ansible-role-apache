@@ -1,9 +1,9 @@
-<Directory {{ item.directory }}>
-   {% if item.options is defined %}
-   Options {{ item.options }}
+<Directory {{ apache_directories[item].directory }}>
+   {% if apache_directories[item].options is defined %}
+   Options {{ apache_directories[item].options }}
    {% endif %}
-   {% if item.allow_override is defined %}
-   AllowOverride {{ item.allow_override }}
+   {% if apache_directories[item].allow_override is defined %}
+   AllowOverride {{ apache_directories[item].allow_override }}
    {% endif -%}
    Require all granted
 </Directory>

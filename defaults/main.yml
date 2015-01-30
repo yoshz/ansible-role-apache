@@ -4,8 +4,8 @@ apache_listen_port: 80
 apache_run_user: 'www-data'
 apache_run_group: 'www-data'
 
-apache_virtualhosts: []
+apache_virtualhosts: {}
 
 apache_modules: []
 
-apache_directories: []
+apache_directories: {}

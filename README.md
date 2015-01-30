@@ -1,6 +1,7 @@
 # enrise.apache
 
-This is an Ansible task for installing and configuring Apache (2.4), as well as creating virtualhosts.
+This is an Ansible task for installing and configuring Apache (2.4),
+as well as creating virtualhosts and directory permissions.
 
 ## Requirements
 
@@ -18,11 +19,20 @@ which contains something like the following:
 
     # A list of virtualhosts to create.
     apache_virtualhosts:
-     - hostname: 'myhostname.example.org'
-       alias: 'alias.example.org'
-       docroot: '/var/www'
-     - hostname: 'virtual_docroot'
-       virtual_docroot: '/var/www/sites/%0/public
+      hostname:
+        hostname: 'myhostname.example.org'
+        alias: 'alias.example.org'
+        docroot: '/var/www'
+      vhosts:
+        hostname: 'virtual_docroot'
+        virtual_docroot: '/var/www/sites/%0/public
+
+    # Directory permissions
+    apache_directories:
+      sites-public:
+        directory: /var/www/sites/*/public
+        options: FollowSymLinks
+        allow_override: All
 
     # The port Apache should listen on.
     apache_listen_port: 80
