@@ -7,7 +7,18 @@
     group=root
     mode=0644
   with_items: apache_virtualhosts.keys()
-  when: apache_virtualhosts|length > 0
+  notify: restart apache
+
+- name: Upload SSL cert files
+  copy: src={{ item.value.ssl_certfile }} dest=/etc/apache2/ssl/{{ item.key }}.crt
+  with_dict: apache_virtualhosts
+  when: item.value.ssl_certfile is defined
+  notify: restart apache
+
+- name: Upload SSL key files
+  copy: src={{ item.value.ssl_keyfile }} dest=/etc/apache2/ssl/{{ item.key }}.key
+  with_dict: apache_virtualhosts
+  when: item.value.ssl_keyfile is defined
   notify: restart apache
 
 - name: Find enabled virtualhosts

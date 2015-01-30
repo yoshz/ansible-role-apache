@@ -23,3 +23,5 @@
     dest=/etc/apache2/ports.conf
   notify: restart apache
 
+- name: Create SSL directory
+  file: path=/etc/apache2/ssl state=directory
