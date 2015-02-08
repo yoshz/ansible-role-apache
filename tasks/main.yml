@@ -14,3 +14,6 @@
 
 - include: directories.yml
   tags: [apache, apache-directories]
+
+- name: Ensure Apache is started and set to run on startup.
+  service: name=apache2 state=started enabled=yes
