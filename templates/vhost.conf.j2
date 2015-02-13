@@ -1,39 +1,31 @@
 <VirtualHost *:{{ apache_listen_port }}>
-	ServerName {{ apache_virtualhosts[item].hostname }}
-	{% if apache_virtualhosts[item].alias is defined %}ServerAlias {{ apache_virtualhosts[item].alias }}{% endif %}
+	ServerName {{ item.value.hostname }}
+	{% if item.value.alias is defined %}ServerAlias {{ item.value.alias }}{% endif %}
 
-	ServerAdmin {{ apache_virtualhosts[item].admin|default('webmaster@localhost') }}
-	{% if apache_virtualhosts[item].virtual_docroot is defined %}VirtualDocumentRoot {{ apache_virtualhosts[item].virtual_docroot }}
-	{% elif apache_virtualhosts[item].docroot is defined %}DocumentRoot {{ apache_virtualhosts[item].docroot }}{% endif %}
+	ServerAdmin {{ item.value.admin|default('webmaster@localhost') }}
+	{% if item.value.virtual_docroot is defined %}VirtualDocumentRoot {{ item.value.virtual_docroot }}
+	{% elif item.value.docroot is defined %}DocumentRoot {{ item.value.docroot }}{% endif %}
 
 	ErrorLog ${APACHE_LOG_DIR}/error.log
 	CustomLog ${APACHE_LOG_DIR}/access.log combined
 
-	{% if apache_virtualhosts[item].docroot is defined %}<Directory {{ apache_virtualhosts[item].docroot }}>
-	    Require all granted
-	</Directory>{% endif %}
-
 </VirtualHost>
 
-{% if apache_virtualhosts[item].ssl_keyfile is defined %}
+{% if item.value.ssl_keyfile is defined %}
 <VirtualHost *:443>
-	ServerName {{ apache_virtualhosts[item].hostname }}
-	{% if apache_virtualhosts[item].alias is defined %}ServerAlias {{ apache_virtualhosts[item].alias }}{% endif %}
+	ServerName {{ item.value.hostname }}
+	{% if item.value.alias is defined %}ServerAlias {{ item.value.alias }}{% endif %}
 
-	ServerAdmin {{ apache_virtualhosts[item].admin|default('webmaster@localhost') }}
-	{% if apache_virtualhosts[item].virtual_docroot is defined %}VirtualDocumentRoot {{ apache_virtualhosts[item].virtual_docroot }}
-	{% elif apache_virtualhosts[item].docroot is defined %}DocumentRoot {{ apache_virtualhosts[item].docroot }}{% endif %}
+	ServerAdmin {{ item.value.admin|default('webmaster@localhost') }}
+	{% if item.value.virtual_docroot is defined %}VirtualDocumentRoot {{ item.value.virtual_docroot }}
+	{% elif item.value.docroot is defined %}DocumentRoot {{ item.value.docroot }}{% endif %}
 
 	ErrorLog ${APACHE_LOG_DIR}/error.log
 	CustomLog ${APACHE_LOG_DIR}/access.log combined
 
 	SSLEngine on
-	SSLCertificateFile /etc/apache2/ssl/{{ item }}.crt
-	SSLCertificateKeyFile /etc/apache2/ssl/{{ item }}.key
-
-	{% if apache_virtualhosts[item].docroot is defined %}<Directory {{ apache_virtualhosts[item].docroot }}>
-		Require all granted
-	</Directory>{% endif %}
+	SSLCertificateFile /etc/apache2/ssl/{{ item.key }}.crt
+	SSLCertificateKeyFile /etc/apache2/ssl/{{ item.key }}.key
 
 </VirtualHost>
 {% endif %}

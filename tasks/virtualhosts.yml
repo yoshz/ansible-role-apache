@@ -2,11 +2,11 @@
 - name: Setup virtualhosts
   template: >
     src=vhost.conf.j2
-    dest=/etc/apache2/sites-enabled/{{ item }}.conf
+    dest=/etc/apache2/sites-enabled/{{ item.value.priority|default(20) }}-{{ item.key }}.conf
     owner=root
     group=root
     mode=0644
-  with_items: apache_virtualhosts.keys()
+  with_dict: apache_virtualhosts
   notify: restart apache
 
 - name: Upload SSL cert files
@@ -26,8 +26,8 @@
   register: vhosts_enabled
   changed_when: False
 
-- name: Disable unmanaged virtualhosts
+- name: Remove unmanaged virtualhosts
   file: name=/etc/apache2/sites-enabled/{{ item }} state=absent
   with_items: vhosts_enabled.stdout_lines
-  when: item[:-5] not in apache_virtualhosts.keys()
+  when: item[3:-5] not in apache_virtualhosts.keys()
   notify: restart apache
