@@ -17,11 +17,20 @@
 
 - name: Set port in ports.conf
   lineinfile: >
-    line="Listen 0.0.0.0:{{ apache_listen_port }}"
+    line="Listen *:{{ apache_listen_port }}"
     regexp="^Listen "
     state=present
     dest=/etc/apache2/ports.conf
   notify: restart apache
+
+- name: Enable SSL SNI in ports.conf
+  lineinfile: >
+    line="NameVirtualHost *:443"
+    regexp="^NameVirtualHost .*:443"
+    state=present
+    dest=/etc/apache2/ports.conf
+  notify: restart apache
+  when: apache_ssl_sni
 
 - name: Create SSL directory
   file: path=/etc/apache2/ssl state=directory

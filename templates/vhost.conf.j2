@@ -1,31 +1,62 @@
 <VirtualHost *:{{ apache_listen_port }}>
 	ServerName {{ item.value.hostname }}
-	{% if item.value.alias is defined %}ServerAlias {{ item.value.alias }}{% endif %}
+{% if item.value.alias is defined %}
+	ServerAlias {{ item.value.alias }}
+{% endif %}
 
 	ServerAdmin {{ item.value.admin|default('webmaster@localhost') }}
-	{% if item.value.virtual_docroot is defined %}VirtualDocumentRoot {{ item.value.virtual_docroot }}
-	{% elif item.value.docroot is defined %}DocumentRoot {{ item.value.docroot }}{% endif %}
+{% if item.value.virtual_docroot is defined %}
+	VirtualDocumentRoot {{ item.value.virtual_docroot }}
+{% elif item.value.docroot is defined %}
+	DocumentRoot {{ item.value.docroot }}
+{% endif %}
 
 	ErrorLog ${APACHE_LOG_DIR}/error.log
 	CustomLog ${APACHE_LOG_DIR}/access.log combined
-
 </VirtualHost>
 
-{% if item.value.ssl_keyfile is defined %}
+{% if item.value.ssl_certfile is defined %}
 <VirtualHost *:443>
 	ServerName {{ item.value.hostname }}
-	{% if item.value.alias is defined %}ServerAlias {{ item.value.alias }}{% endif %}
+{% if item.value.alias is defined %}
+	ServerAlias {{ item.value.alias }}
+{% endif %}
 
 	ServerAdmin {{ item.value.admin|default('webmaster@localhost') }}
-	{% if item.value.virtual_docroot is defined %}VirtualDocumentRoot {{ item.value.virtual_docroot }}
-	{% elif item.value.docroot is defined %}DocumentRoot {{ item.value.docroot }}{% endif %}
+{% if item.value.virtual_docroot is defined %}
+	VirtualDocumentRoot {{ item.value.virtual_docroot }}
+{% elif item.value.docroot is defined %}
+	DocumentRoot {{ item.value.docroot }}
+{% endif %}
 
 	ErrorLog ${APACHE_LOG_DIR}/error.log
 	CustomLog ${APACHE_LOG_DIR}/access.log combined
 
 	SSLEngine on
+	SSLProtocol {{ apache_ssl_protocol }}
+	SSLHonorCipherOrder On
+	SSLCipherSuite "{{ apache_ssl_cipher_suite }}"
+	SSLCompression off
 	SSLCertificateFile /etc/apache2/ssl/{{ item.key }}.crt
+{% if item.value.ssl_keyfile is defined %}
 	SSLCertificateKeyFile /etc/apache2/ssl/{{ item.key }}.key
+{% endif %}
+{% if item.value.ssl_chainfile is defined %}
+	SSLCertificateChainFile /etc/apache2/ssl/{{ item.key }}-chain.crt
+{% endif %}
+{% if item.value.ssl_verify_client is defined %}
+	SSLVerifyClient {{ item.value.ssl_verify_client }}
+{% endif %}
+{% if item.value.ssl_verify_depth is defined %}
+	SSLVerifyDepth {{ item.value.ssl_verify_depth }}
+{% endif %}
+{% if item.value.ssl_ca_certfile is defined %}
+	SSLCACertificateFile /etc/apache2/ssl/{{ item.key }}-ca.crt
+{% endif %}
+{% if item.value.ssl_ca_revocationfile is defined %}
+	SSLCARevocationCheck leaf
+	SSLCARevocationFile /etc/apache2/ssl/{{ item.key }}-ca.crl
+{% endif %}
 
 </VirtualHost>
 {% endif %}

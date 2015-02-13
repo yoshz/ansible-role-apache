@@ -21,6 +21,24 @@
   when: item.value.ssl_keyfile is defined
   notify: restart apache
 
+- name: Upload SSL chain files
+  copy: src={{ item.value.ssl_chainfile }} dest=/etc/apache2/ssl/{{ item.key }}-chain.crt
+  with_dict: apache_virtualhosts
+  when: item.value.ssl_chainfile is defined
+  notify: restart apache
+
+- name: Upload SSL CA cert files
+  copy: src={{ item.value.ssl_ca_certfile }} dest=/etc/apache2/ssl/{{ item.key }}-ca.crt
+  with_dict: apache_virtualhosts
+  when: item.value.ssl_ca_certfile is defined
+  notify: restart apache
+
+- name: Upload SSL CA Revocation files
+  copy: src={{ item.value.ssl_ca_revocationfile }} dest=/etc/apache2/ssl/{{ item.key }}-ca.crl
+  with_dict: apache_virtualhosts
+  when: item.value.ssl_ca_revocationfile is defined
+  notify: restart apache
+
 - name: Find enabled virtualhosts
   shell: ls -1 /etc/apache2/sites-enabled/
   register: vhosts_enabled

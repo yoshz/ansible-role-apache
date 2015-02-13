@@ -26,6 +26,12 @@ which contains something like the following:
       vhosts:
         hostname: 'virtual_docroot'
         virtual_docroot: '/var/www/sites/%0/public
+      ssl:
+        hostname: ssl.example.org
+        docroot: '/var/www/sites/ssl/public'
+        ssl_certfile: 'files/ssl.crt'
+        ssl_keyfile: 'files/ssl.key'
+        ssl_chainfile: 'files/ssl-chain.crt'
 
     # Directory permissions
     apache_directories:
